@@ -1,0 +1,36 @@
+.autocomplete-container {
+  border-bottom: honeydew;
+  border-left: honeydew;
+  border-right: honeydew;
+  border-top: 1px solid #e6e6e6;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  border-radius: 2px;
+  max-width: 300px;
+  z-index: 999;
+  position: absolute;
+}
+
+.form-wrapper {
+  max-width: 500px;
+}
+
+.search-input {
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08);
+  border: honeydew;
+  display: block;
+  padding: 16px;
+  font-size: 16px;
+  border-radius: 2px;
+  outline: none;
+}
+
+.add-button {
+  background: -webkit-linear-gradient(30deg, #dd3c3c, #830e0e) !important;
+  background: -o-linear-gradient(30deg, #dd3c3c, #830e0e) !important;
+  background: linear-gradient(60deg, #dd3c3c, #830e0e) !important;
+  transition: all 0.25s ease-in-out;
+}
+
+.addformcontainer {
+  transition: all 0.25s ease;
+}

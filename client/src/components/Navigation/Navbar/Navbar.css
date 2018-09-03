@@ -1,0 +1,10 @@
+.Navbar {
+    height: 56px;
+    background: -webkit-linear-gradient(30deg,#dd3c3c,#830e0e)!important;
+    background: -o-linear-gradient(30deg,#dd3c3c,#830e0e)!important;
+    background: linear-gradient(60deg,#dd3c3c,#830e0e)!important;
+}
+
+.Navbar h1 {
+    text-shadow: 2px 2px 2px rgba(0,0,0,.15);
+}

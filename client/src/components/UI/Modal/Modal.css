@@ -1,0 +1,9 @@
+.Modal {
+    max-width: 600px;
+    z-index: 500;
+    transition: all 0.3s ease-out;
+}
+
+.z-900 {
+    z-index: 900;
+}
