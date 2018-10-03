@@ -12,7 +12,7 @@ const app = express();
 app.use(bodyParser.json());
 
 // DB Config
-const db = config.mongoURI || "mongodb://localhost/zeunerts-tracker";
+const db = process.env.MONGODB_URI || "mongodb://localhost/zeunerts-tracker";
 
 // Connect to Mongo
 mongoose

@@ -3,7 +3,7 @@ const router = express.Router();
 const config = require("../../config/config");
 
 const googleMapsClient = require("@google/maps").createClient({
-  key: config.mapsAPI,
+  key: process.env.MAPS_API,
   Promise: Promise
 });
 
