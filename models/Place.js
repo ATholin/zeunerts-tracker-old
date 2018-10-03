@@ -40,6 +40,9 @@ const PlaceSchema = new Schema({
     type: Date,
     default: Date.now,
     required: true
+  },
+  location: {
+    type: [Number]
   }
 });
 

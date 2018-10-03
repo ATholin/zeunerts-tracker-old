@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const path = require("path");
+const config = require("./config/config");
 
 const places = require("./routes/api/places");
 
@@ -11,7 +12,7 @@ const app = express();
 app.use(bodyParser.json());
 
 // DB Config
-const db = process.env.MONGODB_URI || "mongodb://localhost/zeunerts-tracker";
+const db = config.mongoURI || "mongodb://localhost/zeunerts-tracker";
 
 // Connect to Mongo
 mongoose

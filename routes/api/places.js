@@ -1,8 +1,9 @@
 const express = require("express");
 const router = express.Router();
+const config = require("../../config/config");
 
 const googleMapsClient = require("@google/maps").createClient({
-  key: process.env.MAPS_API,
+  key: config.mapsAPI,
   Promise: Promise
 });
 
@@ -60,8 +61,13 @@ router.post("/", (req, res) => {
                 city: geoRes.json.results[0].address_components[3].long_name,
                 _id: place.place_id,
                 price: req.body.price,
-                julmust: req.body.julmust
+                julmust: req.body.julmust,
+                location: new Array(
+                  place.geometry.location.lat,
+                  place.geometry.location.lng
+                )
               };
+              console.log(place.geometry.location.lat);
 
               Place.findById(place.place_id)
                 .then(dbplace => {

@@ -3,6 +3,8 @@ import React, { Component } from "react";
 import "./Place.css";
 import axios from "../../axios-places";
 import withError from "../../hoc/withErrorHandler/withErrorHandler";
+import PlaceItem from "../../components/PlaceItem/PlaceItem";
+import Aux from "../../hoc/auxWrapper";
 
 class Place extends Component {
   constructor(props) {
@@ -130,27 +132,14 @@ class Place extends Component {
       <div className="px-4">
         <div className="flex flex-wrap -mx-4">
           <div className="w-full lg:w-1/2 px-4">
-            <div className="mb-4 place bg-grey-lighter shadow rounded p-3">
-              <p className="text-grey-dark font-bold pb-2">{date}</p>
-              <h2 className="text-black inline-block">
-                {this.state.place.name}
-              </h2>
-              <span
-                className={
-                  this.state.place.julmust
-                    ? "flex float-right text-white rounded-full px-2 py-1 font-bold bg-red-light"
-                    : "flex float-right text-white rounded-full px-2 py-1 font-bold bg-yellow-dark"
-                }
-              >
-                {this.state.place.price}
-                kr
-              </span>
-              <span className="block py-2 text-grey-darker font-medium">
-                {this.state.place.address}
-              </span>
+            <PlaceItem
+              key={this.state.place._id}
+              distance={Math.round(this.state.place.distance * 10) / 10}
+              place={this.state.place}
+            >
               <div className="hr-fade mt-4" />
               <div id="map" className="map my-4" />
-            </div>
+            </PlaceItem>
           </div>
           <div className="w-full lg:w-1/2 mt-4 px-4">
             <h1>Historik</h1>
