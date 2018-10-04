@@ -13,24 +13,6 @@ const apiGeolocationSuccess = function(position) {
 };
 
 const tryAPIGeolocation = function() {
-  console.log("got here");
-  axios
-    .post(
-      "https://www.googleapis.com/geolocation/v1/geolocate?key=" +
-        process.env.MAPS_API,
-      function(success) {
-        apiGeolocationSuccess({
-          coords: {
-            latitude: success.location.lat,
-            longitude: success.location.lng
-          }
-        });
-      }
-    )
-    .fail(function(err) {
-      alert("API Geolocation error! \n\n" + err);
-    });
-
   axios
     .get(
       "https://www.googleapis.com/geolocation/v1/geolocate?key=" +
