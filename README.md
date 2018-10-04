@@ -8,11 +8,11 @@ This project is intended for learning, and is a first rewrite of the first appli
 
 1. Clone app
 2. Create a MongoDB project.
-3. Use env variables to add 'MAPS_API' and 'MONGODB_URI'. In Heroku CLI, this would look something like 
+3. Use .env variables to add 'MAPS_API' and 'MONGODB_URI'. Rename .env.default to .env and add values to the variables.
 
 ```
-heroku config:set MAPS_API=<api-key>
-heroku config:set MONGODB_URI=<mongodb_uri>
+MAPS_API=<api-key>
+MONGODB_URI=<mongodb_uri>
 ```
 
 Make sure config is set up correctly, then run:
