@@ -30,6 +30,23 @@ const tryAPIGeolocation = function() {
     .fail(function(err) {
       alert("API Geolocation error! \n\n" + err);
     });
+
+  axios
+    .get(
+      "https://www.googleapis.com/geolocation/v1/geolocate?key=" +
+        process.env.MAPS_API
+    )
+    .then(res => {
+      apiGeolocationSuccess({
+        coords: {
+          latitude: res.data.location.lat,
+          longitude: res.data.location.lng
+        }
+      });
+    })
+    .catch(error => {
+      alert("API Geolocation error! \n\n" + err);
+    });
 };
 
 const browserGeolocationSuccess = function(position) {
