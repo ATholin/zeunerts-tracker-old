@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+require("dotenv").config();
 
 const googleMapsClient = require("@google/maps").createClient({
   key: process.env.MAPS_API,

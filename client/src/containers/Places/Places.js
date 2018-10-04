@@ -13,12 +13,20 @@ class Places extends Component {
     loading: false,
     sort: "distance",
     location: {},
+    gpsAllow: false,
     error: ""
   };
 
   componentDidMount() {
-    this.getLocation();
     this.setState({ loading: true });
+
+    navigator.permissions &&
+      navigator.permissions
+        .query({ name: "geolocation" })
+        .then(PermissionStatus => {
+          PermissionStatus.state === "granted" && this.getLocation();
+        });
+
     axios
       .get("/")
       .then(res => {
@@ -70,16 +78,28 @@ class Places extends Component {
     return deg * (Math.PI / 180);
   }
 
-  getLocation() {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(this.showPosition);
-    } else {
-      alert("Geolocation is not supported by this browser.");
+  getLocation = () => {
+    if (!navigator.geolocation) {
+      return;
     }
-  }
 
-  showPosition = position => {
-    this.setState({ location: position.coords });
+    const success = position => {
+      var latitude = position.coords.latitude;
+      var longitude = position.coords.longitude;
+      this.setState({
+        gpsAllow: true,
+        location: {
+          longitude,
+          latitude
+        }
+      });
+    };
+
+    const error = err => {
+      alert("Error: " + err.message);
+    };
+
+    navigator.geolocation.getCurrentPosition(success, error);
   };
 
   render() {
@@ -121,26 +141,38 @@ class Places extends Component {
     return (
       <Aux>
         <div className="xs:w-full md:w-3/5 mx-auto">
-          <h1 className="pl-2 inline">Platser</h1>
-          <div className="float-right">
-            <span className="text-grey-darker mr-4">Sortera efter: </span>
-            <select
-              className="shadow appearance-none border rounded py-2 px-3 mr-2 text-grey-darker leading-tight"
-              type="select"
-              value={this.state.search}
-              onChange={this.updateSort.bind(this)}
-            >
-              {this.state.location.latitude && this.state.location.longitude ? (
-                <option value="distance">Plats (närmast)</option>
+          <div>
+            <h1 className="pl-2 inline">Platser</h1>
+            <div className="float-right">
+              <span className="text-grey-darker mr-4">Sortera efter: </span>
+              <select
+                className="shadow appearance-none border rounded py-2 px-3 mr-2 text-grey-darker leading-tight"
+                type="select"
+                value={this.state.search}
+                onChange={this.updateSort.bind(this)}
+              >
+                {this.state.location.latitude &&
+                this.state.location.longitude ? (
+                  <option value="distance">Plats (närmast)</option>
+                ) : null}
+                {this.state.location.latitude &&
+                this.state.location.longitude ? (
+                  <option value="-distance">Plats (längst bort)</option>
+                ) : null}
+                <option value="price">Pris (billigast)</option>
+                <option value="-price">Pris (dyrast)</option>
+                <option value="city">Stad (a-ö)</option>
+                <option value="-city">Stad (ö-a)</option>
+              </select>
+              {!this.state.gpsAllow ? (
+                <button
+                  onClick={this.getLocation}
+                  className="shadow appearance-none border rounded py-2 px-3 mr-2 text-grey-darker leading-tight"
+                >
+                  GPS
+                </button>
               ) : null}
-              {this.state.location.latitude && this.state.location.longitude ? (
-                <option value="-distance">Plats (längst bort)</option>
-              ) : null}
-              <option value="price">Pris (billigast)</option>
-              <option value="-price">Pris (dyrast)</option>
-              <option value="city">Stad (a-ö)</option>
-              <option value="-city">Stad (ö-a)</option>
-            </select>
+            </div>
           </div>
           {content}
         </div>

@@ -74,3 +74,6 @@ typings/
 
 # Config directories
 config/config.js
+
+# environment variables
+.env

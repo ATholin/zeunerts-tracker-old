@@ -4,7 +4,6 @@ import "./Place.css";
 import axios from "../../axios-places";
 import withError from "../../hoc/withErrorHandler/withErrorHandler";
 import PlaceItem from "../../components/PlaceItem/PlaceItem";
-import Aux from "../../hoc/auxWrapper";
 
 class Place extends Component {
   constructor(props) {
@@ -30,52 +29,30 @@ class Place extends Component {
         history.push(res.data.history[key]);
       }
       this.setState({ place: res.data, history: history }, () => {
-        let service = new window.google.maps.places.PlacesService(
-          document.createElement("div")
+        let latlng = new window.google.maps.LatLng(
+          parseFloat(this.state.place.location[0]),
+          parseFloat(this.state.place.location[1])
         );
 
-        const request = {
-          placeId: id
-        };
-
-        service.getDetails(request, place => {
-          this.setState(
-            {
-              location: {
-                lat: place.geometry.location.lat(),
-                lng: place.geometry.location.lng()
-              }
-            },
-            () => {
-              let latlng = {
-                lat: place.geometry.location.lat(),
-                lng: place.geometry.location.lng()
-              };
-              this.map = new window.google.maps.Map(
-                document.getElementById("map"),
-                {
-                  zoom: 13,
-                  center: latlng,
-                  disableDefaultUI: true
-                }
-              );
-
-              new window.google.maps.Marker({
-                position: latlng,
-                animation: window.google.maps.Animation.DROP,
-                map: this.map
-              });
-
-              let dirdiv = document.createElement("div");
-              this.DirectionControl(dirdiv, latlng);
-
-              dirdiv.index = 1;
-              this.map.controls[window.google.maps.ControlPosition.BOTTOM].push(
-                dirdiv
-              );
-            }
-          );
+        this.map = new window.google.maps.Map(document.getElementById("map"), {
+          zoom: 13,
+          center: latlng,
+          disableDefaultUI: true
         });
+
+        new window.google.maps.Marker({
+          position: latlng,
+          animation: window.google.maps.Animation.DROP,
+          map: this.map
+        });
+
+        let dirdiv = document.createElement("div");
+        this.DirectionControl(dirdiv, latlng);
+
+        dirdiv.index = 1;
+        this.map.controls[window.google.maps.ControlPosition.BOTTOM].push(
+          dirdiv
+        );
       });
     }).catch = () => {
       this.props.match.history.push(`/${this.state.place._id}`);
@@ -109,9 +86,9 @@ class Place extends Component {
     controlUI.addEventListener("click", () => {
       let url =
         "https://www.google.com/maps/dir/?api=1&&destination=" +
-        latlng.lat +
-        "," +
-        latlng.lng;
+        this.state.place.name +
+        ",+" +
+        this.state.place.city;
       let uri = encodeURI(url);
       window.open(uri, "_blank");
     });
