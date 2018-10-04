@@ -45,7 +45,7 @@ const tryAPIGeolocation = function() {
       });
     })
     .catch(error => {
-      alert("API Geolocation error! \n\n" + err);
+      alert("API Geolocation error! \n\n" + error);
     });
 };
 
