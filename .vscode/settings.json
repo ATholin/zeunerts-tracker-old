@@ -1,0 +1,8 @@
+{
+    "appService.deploySubpath": "client",
+    "appService.zipIgnorePattern": [
+        "node_modules{,/**}",
+        "node_modules{,/**}"
+    ],
+    "appService.defaultWebAppToDeploy": "/subscriptions/bbadba88-c2ea-49b5-b457-dc6bacae584b/resourceGroups/appsvc_rg_linux_centralus/providers/Microsoft.Web/sites/zeunerts-tracker"
+}

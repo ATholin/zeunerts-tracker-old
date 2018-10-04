@@ -6,6 +6,7 @@ import PlaceItem from "../../components/PlaceItem/PlaceItem";
 import axios from "../../axios-places";
 import Spinner from "../../components/UI/Spinner/Spinner";
 import withError from "../../hoc/withErrorHandler/withErrorHandler";
+import { tryGeolocation, userlocation } from "../../util/geolocate";
 
 class Places extends Component {
   state = {
@@ -20,12 +21,8 @@ class Places extends Component {
   componentDidMount() {
     this.setState({ loading: true });
 
-    navigator.permissions &&
-      navigator.permissions
-        .query({ name: "geolocation" })
-        .then(PermissionStatus => {
-          PermissionStatus.state === "granted" && this.getLocation();
-        });
+    tryGeolocation();
+    this.setState({ location: userlocation });
 
     axios
       .get("/")
@@ -77,30 +74,6 @@ class Places extends Component {
   deg2rad(deg) {
     return deg * (Math.PI / 180);
   }
-
-  getLocation = () => {
-    if (!navigator.geolocation) {
-      return;
-    }
-
-    const success = position => {
-      var latitude = position.coords.latitude;
-      var longitude = position.coords.longitude;
-      this.setState({
-        gpsAllow: true,
-        location: {
-          longitude,
-          latitude
-        }
-      });
-    };
-
-    const error = err => {
-      alert("Error: " + err.message);
-    };
-
-    navigator.geolocation.getCurrentPosition(success, error);
-  };
 
   render() {
     if (this.state.sort === "distance" || this.state.sort === "-distance") {
