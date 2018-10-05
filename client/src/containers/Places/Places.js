@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import "./Places.css";
 import Aux from "../../hoc/auxWrapper";
 import PlaceItem from "../../components/PlaceItem/PlaceItem";
-import axios from "../../axios-places";
+import axios from "axios";
 import Spinner from "../../components/UI/Spinner/Spinner";
 import withError from "../../hoc/withErrorHandler/withErrorHandler";
 import { tryGeolocation, userlocation } from "../../util/geolocate";
