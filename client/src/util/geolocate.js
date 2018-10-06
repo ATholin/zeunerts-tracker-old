@@ -1,33 +1,38 @@
-import axios from "../axios-places";
-require("dotenv").config();
+import axios from "axios";
 
 export let userlocation = {};
 
 const apiGeolocationSuccess = function(position) {
-  alert(
+  console.log(
     "API geolocation success!\n\nlat = " +
       position.coords.latitude +
       "\nlng = " +
       position.coords.longitude
   );
+  userlocation = {
+    ...position.coords
+  };
 };
 
-const tryAPIGeolocation = function() {
+export const tryAPIGeolocation = function() {
   axios
-    .get(
+    .post(
       "https://www.googleapis.com/geolocation/v1/geolocate?key=" +
-        process.env.MAPS_API
+        process.env.GEO_KEY
     )
     .then(res => {
+      console.log(res.data.location.lat);
       apiGeolocationSuccess({
-        coords: {
-          latitude: res.data.location.lat,
-          longitude: res.data.location.lng
+        position: {
+          coords: {
+            latitude: res.data.location.lat,
+            longitude: res.data.location.lng
+          }
         }
       });
     })
     .catch(error => {
-      alert("API Geolocation error! \n\n" + error);
+      console.log("API Geolocation error! \n\n" + error);
     });
 };
 

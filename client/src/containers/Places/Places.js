@@ -3,17 +3,21 @@ import React, { Component } from "react";
 import "./Places.css";
 import Aux from "../../hoc/auxWrapper";
 import PlaceItem from "../../components/PlaceItem/PlaceItem";
-import axios from "axios";
+import axios from "../../axios-places";
 import Spinner from "../../components/UI/Spinner/Spinner";
 import withError from "../../hoc/withErrorHandler/withErrorHandler";
-import { tryGeolocation, userlocation } from "../../util/geolocate";
+import {
+  // tryGeolocation,
+  tryAPIGeolocation,
+  userlocation
+} from "../../util/geolocate";
 
 class Places extends Component {
   state = {
     places: [],
     loading: false,
-    sort: "distance",
-    location: {},
+    sort: "price",
+    location: [0, 0],
     gpsAllow: false,
     error: ""
   };
@@ -21,8 +25,10 @@ class Places extends Component {
   componentDidMount() {
     this.setState({ loading: true });
 
-    tryGeolocation();
-    this.setState({ location: userlocation });
+    // tryAPIGeolocation();
+    // if (userlocation) {
+    //   this.setState({ location: userlocation });
+    // }
 
     axios
       .get("/")
@@ -76,7 +82,11 @@ class Places extends Component {
   }
 
   render() {
-    if (this.state.sort === "distance" || this.state.sort === "-distance") {
+    if (
+      this.state.sort === "distance" ||
+      this.state.sort === "-distance" ||
+      this.state.gpsAllow
+    ) {
       this.state.places.forEach(place => {
         let distance = this.getDistanceFromLatLonInKm(
           this.state.location.latitude,
@@ -139,8 +149,10 @@ class Places extends Component {
               </select>
               {!this.state.gpsAllow ? (
                 <button
+                  disabled
                   onClick={this.getLocation}
-                  className="shadow appearance-none border rounded py-2 px-3 mr-2 text-grey-darker leading-tight"
+                  title="GPS är för tillfället avaktiverat då det ej fungerar på osäkra anslutningar."
+                  className="shadow appearance-none bg-grey cursor-not-allowed border rounded py-2 px-3 mr-2 text-grey-darker leading-tight"
                 >
                   GPS
                 </button>
