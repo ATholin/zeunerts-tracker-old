@@ -4,12 +4,15 @@ const bodyParser = require("body-parser");
 const path = require("path");
 require("dotenv").config();
 
+// routes
 const places = require("./routes/api/places");
+const near = require("./routes/api/near");
 
 const app = express();
 
 //Bodyparser Middleware
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // DB Config
 const db = process.env.MONGODB_URI || "mongodb://localhost/zeunerts-tracker";
@@ -25,6 +28,7 @@ mongoose
 
 // Use Routes
 app.use("/api/places", places);
+app.use("/api/near", near);
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static("client/build"));
