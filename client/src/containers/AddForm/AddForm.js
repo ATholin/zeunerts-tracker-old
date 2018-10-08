@@ -4,7 +4,7 @@ import { withRouter } from "react-router-dom";
 import "./AddForm.css";
 import Spinner from "../../components/UI/Spinner/Spinner";
 import PlaceAC from "./PlaceAC/PlaceAC";
-import axios from "../../axios-places";
+import axios from "axios";
 
 class AddForm extends Component {
   constructor(props) {
@@ -55,7 +55,7 @@ class AddForm extends Component {
     };
 
     axios
-      .post("/", payload)
+      .post("/api/places", payload)
       .then(res => {
         this.setState({
           success: true,

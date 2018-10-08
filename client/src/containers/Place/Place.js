@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 
 import "./Place.css";
-import axios from "../../axios-places";
-import withError from "../../hoc/withErrorHandler/withErrorHandler";
+import axios from "axios";
+// import withError from "../../hoc/withErrorHandler/withErrorHandler";
 import PlaceItem from "../../components/PlaceItem/PlaceItem";
+import Spinner from "../../components/UI/Spinner/Spinner";
 
 class Place extends Component {
   constructor(props) {
@@ -13,14 +14,31 @@ class Place extends Component {
       place: {},
       location: {},
       history: [],
-      formatted_address: ""
+      formatted_address: "",
+      nearby: [],
+      loading: false
     };
   }
 
   componentDidMount() {
+    this.setState({ loading: true });
     const { id } = this.props.match.params;
 
-    axios.get("/" + id).then(res => {
+    this.getLocation(id);
+  }
+
+  componentDidUpdate(prevProps) {
+    // respond to parameter change in scenario 3
+    let oldId = prevProps.match.params.id;
+    let newId = this.props.match.params.id;
+    if (newId !== oldId) {
+      this.setState({ loading: true });
+      this.getLocation(newId);
+    }
+  }
+
+  getLocation = id => {
+    axios.get("/api/places/" + id).then(res => {
       if (!res.data) {
         window.location = "/";
       }
@@ -29,6 +47,8 @@ class Place extends Component {
         history.push(res.data.history[key]);
       }
       this.setState({ place: res.data, history: history }, () => {
+        this.getNearbyLocations();
+
         let latlng = new window.google.maps.LatLng(
           parseFloat(this.state.place.location[0]),
           parseFloat(this.state.place.location[1])
@@ -55,9 +75,10 @@ class Place extends Component {
         );
       });
     }).catch = () => {
+      this.setState({ loading: false });
       this.props.match.history.push(`/${this.state.place._id}`);
     };
-  }
+  };
 
   DirectionControl = (dirdiv, latlng) => {
     let controlUI = document.createElement("div");
@@ -94,6 +115,20 @@ class Place extends Component {
     });
   };
 
+  getNearbyLocations = () => {
+    this.setState({ nearby: [] });
+    axios
+      .post("/api/near", { _id: this.state.place._id, radius: 100 })
+      .then(res => {
+        if (res.data && res.status === 200) {
+          this.setState({ nearby: Object.values(res.data), loading: false });
+        }
+      })
+      .catch(() => {
+        this.setState({ loading: false });
+      });
+  };
+
   render() {
     let date = new Date(this.state.place.date).toLocaleString();
 
@@ -105,8 +140,39 @@ class Place extends Component {
         </h4>
       );
 
+    let loading;
+    let nearby;
+
+    if (this.state.loading) {
+      loading = (
+        <div className="my-5">
+          <Spinner />
+        </div>
+      );
+    }
+
+    if (this.state.nearby) {
+      nearby = (
+        <div>
+          <h2 className="mt-10">Platser i närheten</h2>
+          <div className="flex flex-wrap items-center justify-center my-4">
+            {this.state.nearby.map(place => {
+              return (
+                <PlaceItem
+                  key={place._id}
+                  distance={Math.round(place.distance * 10) / 10}
+                  place={place}
+                />
+              );
+            })}
+          </div>
+        </div>
+      );
+    }
+
     return (
       <div className="px-4">
+        {loading}
         <div className="flex flex-wrap -mx-4">
           <div className="w-full lg:w-1/2 px-4">
             <PlaceItem
@@ -119,7 +185,7 @@ class Place extends Component {
             </PlaceItem>
           </div>
           <div className="w-full lg:w-1/2 mt-4 px-4">
-            <h1>Historik</h1>
+            <h2>Historik</h2>
             <div className="flex flex-wrap items-center justify-center my-4 place bg-grey-lighter shadow rounded p-3">
               <p className="text-grey-darker">
                 Senast ändrad: <strong>{date}</strong>
@@ -153,6 +219,9 @@ class Place extends Component {
                 })}
               </div>
             </div>
+
+            {nearby}
+            {loading}
           </div>
         </div>
       </div>
@@ -160,4 +229,5 @@ class Place extends Component {
   }
 }
 
-export default withError(Place, axios);
+// export default withError(Place, axios);
+export default Place;

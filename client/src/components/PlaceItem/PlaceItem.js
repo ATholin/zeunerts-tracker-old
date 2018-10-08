@@ -22,7 +22,10 @@ class PlaceItem extends Component {
     }
 
     return (
-      <Link className="no-underline" to={"/place/" + this.props.place._id}>
+      <Link
+        className="no-underline w-full"
+        to={"/place/" + this.props.place._id}
+      >
         <div className="mb-4 place bg-grey-lighter shadow rounded px-2 py-1 sm:px-5 sm:py-4">
           <p className="text-grey-dark font-bold text-s pb-2">{date}</p>
           <h2 className="text-black inline-block w-3/4">
