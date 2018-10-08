@@ -5,14 +5,18 @@ import "./Navbar.css";
 
 const Navbar = () => (
   <header className="Navbar shadow-md w-full flex py-10 mb-10">
-    <div className="self-center w-full items-center flex justify-between inline-block px-5">
+    <div className="self-center w-full items-center flex justify-between inline-block px-10">
       <Link className="no-underline text-white" to="/">
         <h1 className="text-2xl font-bold">Zeunerts Tracker</h1>
       </Link>
       <div className="float-right text-white">
         <ul>
           <li className="list-reset">
-            <Link className="no-underline text-white" to="/list">
+            <Link
+              className="no-underline text-grey cursor-not-allowed"
+              title="Årslistor kommer senare."
+              to="/list"
+            >
               <p>Listor</p>
             </Link>
           </li>
