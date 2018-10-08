@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const path = require("path");
+const compression = require("compression");
 require("dotenv").config();
 
 // routes
@@ -13,6 +14,9 @@ const app = express();
 //Bodyparser Middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+// Compression
+app.use(compression());
 
 // DB Config
 const db = process.env.MONGODB_URI || "mongodb://localhost/zeunerts-tracker";
