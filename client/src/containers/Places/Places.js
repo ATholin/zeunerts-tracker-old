@@ -109,7 +109,6 @@ class Places extends Component {
           <div>
             <h1 className="pl-2 inline">Platser</h1>
             <div className="float-right">
-              <span className="text-grey-darker mr-4">Sortera efter: </span>
               <select
                 className="shadow appearance-none border rounded py-2 px-3 mr-2 text-grey-darker leading-tight"
                 type="select"
