@@ -1,18 +1,25 @@
-import React from 'react';
-import { Link } from 'react-router-dom'
+import React from "react";
+import { Link } from "react-router-dom";
 
-import './Navbar.css'
+import "./Navbar.css";
 
 const Navbar = () => (
-    <header className="Navbar shadow-md w-full flex justify-center py-16 mb-10">
-        <div className="self-center inline-block">
-            <Link className="no-underline text-white" to='/'>
-                <h1 className="text-4xl font-bold">Zeunerts Tracker</h1>
+  <header className="Navbar shadow-md w-full flex py-10 mb-10">
+    <div className="self-center w-full items-center flex justify-between inline-block px-5">
+      <Link className="no-underline text-white" to="/">
+        <h1 className="text-2xl font-bold">Zeunerts Tracker</h1>
+      </Link>
+      <div className="float-right text-white">
+        <ul>
+          <li className="list-reset">
+            <Link className="no-underline text-white" to="/list">
+              <p>Listor</p>
             </Link>
-        </div>
-        <nav>
-        </nav>
-    </header>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </header>
 );
 
-export default Navbar
+export default Navbar;
