@@ -50,7 +50,7 @@ class AddForm extends Component {
 
     const payload = {
       address: this.state.address,
-      price: this.state.price,
+      price: this.state.price.replace(/[^0-9]/, ""),
       julmust: this.state.julmust
     };
 
@@ -83,7 +83,7 @@ class AddForm extends Component {
           <input
             required
             onChange={this.onPriceChanged.bind(this)}
-            type="text"
+            type="number"
             placeholder="Pris"
             className="flex-grow w-3/5 bg-white p-4 mb-2 location-search-input shadow rounded"
           />

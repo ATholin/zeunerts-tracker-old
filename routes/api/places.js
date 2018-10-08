@@ -41,10 +41,6 @@ router.get("/:id", (req, res) => {
 router.post("/", (req, res) => {
   const date = new Date();
   if (req.body.price && req.body.address && req.body.julmust) {
-    var reg = /^\d+$/;
-    if (!reg.test(req.body.price)) {
-      res.status(500).json({ error: "Price is not a number." });
-    }
     if (req.body.price > 200) {
       res.status(500).json({ error: "Price is too high." });
     }
@@ -67,7 +63,7 @@ router.post("/", (req, res) => {
                 street: geoRes.json.results[0].address_components[1].long_name,
                 city: geoRes.json.results[0].address_components[3].long_name,
                 _id: place.place_id,
-                price: req.body.price,
+                price: req.body.price.value.replace(/\D+/, ""),
                 julmust: req.body.julmust,
                 location: new Array(
                   place.geometry.location.lat,
