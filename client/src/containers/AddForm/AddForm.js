@@ -57,17 +57,19 @@ class AddForm extends Component {
     axios
       .post("/api/places", payload)
       .then(res => {
-        this.setState({
-          success: true,
-          loading: false
-        });
-        setTimeout(() => {
-          window.location = "/";
-        }, 2000);
+        if (res.data && res.status === 200) {
+          this.setState({
+            success: true,
+            loading: false
+          });
+          setTimeout(() => {
+            window.location = "/";
+          }, 2000);
+        }
       })
       .catch(err => {
         this.setState({
-          error: "Ett fel uppstod. Försök igen senare.",
+          error: err.response.data.error,
           loading: false
         });
       });

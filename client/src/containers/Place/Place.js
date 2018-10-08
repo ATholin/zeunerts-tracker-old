@@ -16,6 +16,7 @@ class Place extends Component {
       history: [],
       formatted_address: "",
       nearby: [],
+      error: "",
       loading: false
     };
   }
@@ -38,46 +39,52 @@ class Place extends Component {
   }
 
   getLocation = id => {
-    axios.get("/api/places/" + id).then(res => {
-      if (!res.data) {
-        window.location = "/";
-      }
-      let history = [];
-      for (let key in res.data.history) {
-        history.push(res.data.history[key]);
-      }
-      this.setState({ place: res.data, history: history }, () => {
-        this.getNearbyLocations();
+    axios
+      .get("/api/places/" + id)
+      .then(res => {
+        if (!res.data) {
+          window.location = "/";
+        }
+        let history = [];
+        for (let key in res.data.history) {
+          history.push(res.data.history[key]);
+        }
+        this.setState({ place: res.data, history: history }, () => {
+          this.getNearbyLocations();
 
-        let latlng = new window.google.maps.LatLng(
-          parseFloat(this.state.place.location[0]),
-          parseFloat(this.state.place.location[1])
-        );
+          let latlng = new window.google.maps.LatLng(
+            parseFloat(this.state.place.location[0]),
+            parseFloat(this.state.place.location[1])
+          );
 
-        this.map = new window.google.maps.Map(document.getElementById("map"), {
-          zoom: 13,
-          center: latlng,
-          disableDefaultUI: true
+          this.map = new window.google.maps.Map(
+            document.getElementById("map"),
+            {
+              zoom: 13,
+              center: latlng,
+              disableDefaultUI: true
+            }
+          );
+
+          new window.google.maps.Marker({
+            position: latlng,
+            animation: window.google.maps.Animation.DROP,
+            map: this.map
+          });
+
+          let dirdiv = document.createElement("div");
+          this.DirectionControl(dirdiv, latlng);
+
+          dirdiv.index = 1;
+          this.map.controls[window.google.maps.ControlPosition.BOTTOM].push(
+            dirdiv
+          );
         });
-
-        new window.google.maps.Marker({
-          position: latlng,
-          animation: window.google.maps.Animation.DROP,
-          map: this.map
-        });
-
-        let dirdiv = document.createElement("div");
-        this.DirectionControl(dirdiv, latlng);
-
-        dirdiv.index = 1;
-        this.map.controls[window.google.maps.ControlPosition.BOTTOM].push(
-          dirdiv
-        );
+      })
+      .catch(err => {
+        this.setState({ loading: false, error: err.response.data });
+        this.props.match.history.push(`/${this.state.place._id}`);
       });
-    }).catch = () => {
-      this.setState({ loading: false });
-      this.props.match.history.push(`/${this.state.place._id}`);
-    };
   };
 
   DirectionControl = (dirdiv, latlng) => {
@@ -124,7 +131,7 @@ class Place extends Component {
           this.setState({ nearby: Object.values(res.data), loading: false });
         }
       })
-      .catch(() => {
+      .catch(err => {
         this.setState({ loading: false });
       });
   };
@@ -142,6 +149,18 @@ class Place extends Component {
 
     let loading;
     let nearby;
+    let error;
+
+    if (this.state.error) {
+      error = (
+        <div
+          className="mt-4 shadow bg-red-lightest border border-red-lighter text-red-dark px-4 py-3 rounded relative"
+          role="alert"
+        >
+          <strong className="font-bold">{this.state.error}</strong>
+        </div>
+      );
+    }
 
     if (this.state.loading) {
       loading = (
@@ -172,6 +191,7 @@ class Place extends Component {
 
     return (
       <div className="px-4">
+        {error}
         {loading}
         <div className="flex flex-wrap -mx-4">
           <div className="w-full lg:w-1/2 px-4">

@@ -41,6 +41,13 @@ router.get("/:id", (req, res) => {
 router.post("/", (req, res) => {
   const date = new Date();
   if (req.body.price && req.body.address && req.body.julmust) {
+    var reg = /^\d+$/;
+    if (!reg.test(req.body.price)) {
+      res.status(500).json({ error: "Price is not a number." });
+    }
+    if (req.body.price > 200) {
+      res.status(500).json({ error: "Price is too high." });
+    }
     googleMapsClient
       .geocode({ address: req.body.address })
       .asPromise()
@@ -102,18 +109,22 @@ router.post("/", (req, res) => {
             })
             .catch(err => {
               console.log(err);
-              res.status(500).json({ error: "Error getting place details." });
+              res.status(500).json({
+                error: "Error getting place details. Please try again later."
+              });
             });
         }
       })
       .catch(err => {
         console.log(err);
-        res.status(500).json({ error: "Error geocoding address." });
+        res
+          .status(500)
+          .json({ error: "Error geocoding address. Please try again later." });
       });
   } else {
     res
       .status(400)
-      .json({ error: "Could not parse place with incomplete body" });
+      .json({ error: "Could not parse place with incomplete fields" });
   }
 });
 
