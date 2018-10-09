@@ -5,7 +5,7 @@ import "./Navbar.css";
 
 const Navbar = () => (
   <header className="Navbar shadow-md w-full flex py-10 mb-10">
-    <div className="self-center w-full items-center flex justify-between inline-block px-10">
+    <div className="container mx-auto px-3 self-center w-full items-center flex justify-between inline-block xs:w-full md:w-3/5">
       <Link className="no-underline text-white" to="/">
         <h1 className="text-2xl font-bold">Zeunerts Tracker</h1>
       </Link>
