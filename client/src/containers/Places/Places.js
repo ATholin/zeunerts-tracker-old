@@ -8,8 +8,7 @@ import Spinner from "../../components/UI/Spinner/Spinner";
 import withError from "../../hoc/withErrorHandler/withErrorHandler";
 import {
   // tryGeolocation,
-  tryAPIGeolocation,
-  userlocation,
+  // tryGeolocation,
   getDistanceFromLatLonInKm
 } from "../../util/geolocate";
 
@@ -18,17 +17,31 @@ class Places extends Component {
     places: [],
     loading: false,
     sort: "price",
-    location: [0, 0],
+    location: {},
     gpsAllow: false,
     error: ""
+  };
+
+  getLocation = () => {
+    if (navigator.geolocation) {
+      return navigator.geolocation.getCurrentPosition(
+        position => {
+          this.setState({
+            location: position.coords
+          });
+        },
+        null,
+        { maximumAge: 50000, timeout: 20000, enableHighAccuracy: true }
+      );
+    }
   };
 
   componentDidMount() {
     this.setState({ loading: true });
 
-    // tryAPIGeolocation();
+    // tryGeolocation();
     // if (userlocation) {
-    //   this.setState({ location: userlocation });
+    //   this.setState({ location: userlocation, gpsAllow: true });
     // }
 
     axios
@@ -70,7 +83,7 @@ class Places extends Component {
       this.state.gpsAllow
     ) {
       this.state.places.forEach(place => {
-        let distance = this.getDistanceFromLatLonInKm(
+        let distance = getDistanceFromLatLonInKm(
           this.state.location.latitude,
           this.state.location.longitude,
           place.location[0],
@@ -130,10 +143,8 @@ class Places extends Component {
               </select>
               {!this.state.gpsAllow ? (
                 <button
-                  disabled
                   onClick={this.getLocation}
-                  title="GPS är för tillfället avaktiverat då det ej fungerar på osäkra anslutningar."
-                  className="shadow appearance-none bg-grey cursor-not-allowed border rounded py-2 px-3 mr-2 text-grey-darker leading-tight"
+                  className="shadow appearance-none border rounded py-2 px-3 mr-2 text-grey-darker leading-tight"
                 >
                   GPS
                 </button>
