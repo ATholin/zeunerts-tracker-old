@@ -40,12 +40,13 @@ router.get("/:id", (req, res) => {
 // @access  Public
 router.post("/", (req, res) => {
   const date = new Date();
-  if (req.body.price && req.body.address && req.body.julmust) {
-    if (req.body.price > 200) {
+  let price = Math.round(req.body.price);
+  if (price && req.body.address && req.body.julmust) {
+    if (price > 200) {
       res.status(500).json({ error: "Price is too high." });
     }
     googleMapsClient
-      .geocode({ address: req.body.address })
+      .geocode({ address: address })
       .asPromise()
       .then(geoRes => {
         if (geoRes.json.results.length) {
@@ -63,7 +64,7 @@ router.post("/", (req, res) => {
                 street: geoRes.json.results[0].address_components[1].long_name,
                 city: geoRes.json.results[0].address_components[3].long_name,
                 _id: place.place_id,
-                price: req.body.price.replace(/[^0-9]/, ""),
+                price: price.replace(/[^0-9]/, ""),
                 julmust: req.body.julmust,
                 location: new Array(
                   place.geometry.location.lat,
@@ -89,7 +90,7 @@ router.post("/", (req, res) => {
                     const newItem = new Place({
                       ...parsedPlace,
                       history: {
-                        price: req.body.price,
+                        price: price,
                         julmust: req.body.julmust,
                         date: date
                       }
