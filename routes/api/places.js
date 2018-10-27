@@ -63,7 +63,7 @@ router.post("/", (req, res) => {
                 street: geoRes.json.results[0].address_components[1].long_name,
                 city: geoRes.json.results[0].address_components[3].long_name,
                 _id: place.place_id,
-                price: req.body.price.replace(/[^0-9]/, ""),
+                price: req.body.price,
                 julmust: req.body.julmust,
                 location: new Array(
                   place.geometry.location.lat,
