@@ -23,7 +23,7 @@ class AddForm extends Component {
 
   onPriceChanged = event => {
     this.setState({
-      price: event.target.value.replace(/[^0-9]/, "")
+      price: Math.round(event.target.value)
     });
   };
 

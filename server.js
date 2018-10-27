@@ -23,7 +23,10 @@ function requireHTTPS(req, res, next) {
   }
   next();
 }
-app.use(requireHTTPS);
+
+if (process.env.NODE_ENV === "production") {
+  app.use(requireHTTPS);
+}
 
 //Bodyparser Middleware
 app.use(bodyParser.json());
