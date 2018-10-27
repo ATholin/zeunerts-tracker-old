@@ -50,7 +50,7 @@ class AddForm extends Component {
 
     const payload = {
       address: this.state.address,
-      price: this.state.price.replace(/[^0-9]/, ""),
+      price: this.state.price,
       julmust: this.state.julmust
     };
 
