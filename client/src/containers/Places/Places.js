@@ -27,6 +27,7 @@ class Places extends Component {
       return navigator.geolocation.getCurrentPosition(
         position => {
           this.setState({
+            gpsAllow: true,
             location: position.coords
           });
         },
@@ -38,6 +39,7 @@ class Places extends Component {
 
   componentDidMount() {
     this.setState({ loading: true });
+    // this.getLocation();
 
     // tryGeolocation();
     // if (userlocation) {
@@ -77,12 +79,9 @@ class Places extends Component {
   }
 
   render() {
-    if (
-      this.state.sort === "distance" ||
-      this.state.sort === "-distance" ||
-      this.state.gpsAllow
-    ) {
-      this.state.places.forEach(place => {
+    let places = [...this.state.places];
+    if (this.state.gpsAllow) {
+      places.forEach(place => {
         let distance = getDistanceFromLatLonInKm(
           this.state.location.latitude,
           this.state.location.longitude,
@@ -93,11 +92,11 @@ class Places extends Component {
       });
     }
 
-    this.state.places.sort(this.sortPlaces(this.state.sort));
+    places.sort(this.sortPlaces(this.state.sort));
 
     let content = (
       <ul className="mt-4 list-reset py-5">
-        {this.state.places.map(place => {
+        {places.map(place => {
           return (
             <PlaceItem
               key={place._id}
