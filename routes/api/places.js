@@ -46,7 +46,7 @@ router.get("/:id", (req, res) => {
 // @access  Public
 router.post("/", (req, res) => {
   const date = new Date();
-  if (req.body.price && req.body.address && (typeof req.julmust != "undefined" && req.julmust != null)) {
+  if (req.body.price && req.body.address) {
     if (req.body.price > 200) {
       res.status(500).json({
         error: "Price is too high."
