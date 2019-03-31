@@ -15,10 +15,14 @@ const Place = require("../../models/Place");
 // @access  Public
 router.get("/", (req, res) => {
   Place.find()
-    .sort({ date: -1 })
+    .sort({
+      date: -1
+    })
     .then(items => res.json(items))
     .catch(err => {
-      res.status(404).json({ error: "Could not get places" });
+      res.status(404).json({
+        error: "Could not get places"
+      });
     });
 });
 
@@ -31,7 +35,9 @@ router.get("/:id", (req, res) => {
       res.json(place);
     })
     .catch(err => {
-      res.status(404).json({ error: "Could not get place" });
+      res.status(404).json({
+        error: "Could not get place"
+      });
     });
 });
 
@@ -40,17 +46,23 @@ router.get("/:id", (req, res) => {
 // @access  Public
 router.post("/", (req, res) => {
   const date = new Date();
-  if (req.body.price && req.body.address && req.body.julmust) {
+  if (req.body.price && req.body.address && typeof req.julmust != "undefined" || req.julmust != null) {
     if (req.body.price > 200) {
-      res.status(500).json({ error: "Price is too high." });
+      res.status(500).json({
+        error: "Price is too high."
+      });
     }
     googleMapsClient
-      .geocode({ address: req.body.address })
+      .geocode({
+        address: req.body.address
+      })
       .asPromise()
       .then(geoRes => {
         if (geoRes.json.results.length) {
           googleMapsClient
-            .place({ placeid: geoRes.json.results[0].place_id })
+            .place({
+              placeid: geoRes.json.results[0].place_id
+            })
             .asPromise()
             .then(placeRes => {
               const place = placeRes.json.result;
@@ -115,12 +127,16 @@ router.post("/", (req, res) => {
         console.log(err);
         res
           .status(500)
-          .json({ error: "Error geocoding address. Please try again later." });
+          .json({
+            error: "Error geocoding address. Please try again later."
+          });
       });
   } else {
     res
       .status(400)
-      .json({ error: "Could not parse place with incomplete fields" });
+      .json({
+        error: "Could not parse place with incomplete fields"
+      });
   }
 });
 
