@@ -66,6 +66,7 @@ router.post("/", (req, res) => {
             .asPromise()
             .then(placeRes => {
               const place = placeRes.json.result;
+              const isBottle = req.body.price < 30
               const parsedPlace = {
                 date: date,
                 name: place.name,
@@ -77,6 +78,7 @@ router.post("/", (req, res) => {
                 _id: place.place_id,
                 price: req.body.price,
                 julmust: req.body.julmust,
+                bottle: isBottle,
                 location: new Array(
                   place.geometry.location.lat,
                   place.geometry.location.lng
@@ -90,10 +92,12 @@ router.post("/", (req, res) => {
                     dbplace.history.push({
                       price: parsedPlace.price,
                       julmust: parsedPlace.julmust,
-                      date: parsedPlace.date
+                      date: parsedPlace.date,
+                      bottle: isBottle
                     });
                     dbplace.price = parsedPlace.price;
                     dbplace.date = parsedPlace.date;
+                    dbplace.bottle = isBottle;
                     dbplace
                       .save()
                       .then(dbplace => res.status(200).json(dbplace));

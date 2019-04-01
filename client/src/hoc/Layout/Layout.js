@@ -17,7 +17,10 @@ class Layout extends Component {
           <Link className="no-underline m-10 fixed pin-r pin-b z-50" to="/add">
             <div className="fab">
               {" "}
-              <Button className="fab hover:shadow-lg" variant="fab">
+              <Button
+                className="fab fab-yellow hover:shadow-lg text-grey-lightest"
+                variant="fab"
+              >
                 +
               </Button>
             </div>

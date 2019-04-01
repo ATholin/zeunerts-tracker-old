@@ -32,6 +32,10 @@ const PlaceSchema = new Schema({
     type: Boolean,
     required: true
   },
+  bottle: {
+    type: Boolean,
+    required: true
+  },
   history: {
     type: Array,
     required: true

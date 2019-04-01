@@ -19,7 +19,7 @@ function requireHTTPS(req, res, next) {
     req.get("x-forwarded-proto") !== "https" &&
     process.env.NODE_ENV !== "development"
   ) {
-    return res.redirect("https://" + req.get("host") + req.url);
+    return res.redirect("http://" + req.get("host") + req.url);
   }
   next();
 }
@@ -30,7 +30,9 @@ if (process.env.NODE_ENV === "production") {
 
 //Bodyparser Middleware
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
 
 // Compression
 app.use(compression());
@@ -41,8 +43,9 @@ const db = process.env.MONGODB_URI || "mongodb://localhost/zeunerts-tracker";
 // Connect to Mongo
 mongoose
   .connect(
-    db,
-    { useNewUrlParser: true }
+    db, {
+      useNewUrlParser: true
+    }
   )
   .then(() => console.log("MongoDB Connected"))
   .catch(err => console.log(err));
