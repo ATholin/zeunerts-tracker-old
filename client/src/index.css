@@ -1,4 +1,19 @@
-@import url("https://fonts.googleapis.com/css?family=Roboto:500,700");
+/* latin */
+@font-face {
+  font-family: "Roboto";
+  font-style: normal;
+  font-display: auto;
+  font-weight: 700;
+  src: url("./assets/fonts/Roboto-Bold.ttf");
+}
+
+@font-face {
+  font-family: "Roboto";
+  font-style: normal;
+  font-display: auto;
+  font-weight: 500;
+  src: url("./assets/fonts/Roboto-Medium.ttf");
+}
 
 body {
   margin: 0;
